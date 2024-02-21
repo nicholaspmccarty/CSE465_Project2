@@ -26,8 +26,14 @@
 ; ================ Solve the following functions ===================
 ; Return a list with only the negatives items
 (define (negatives lst)
-	lst
+  (if (null? lst) 
+          '()
+          (if (< (car lst) 0)  ; Check if the first element is negative
+          (cons (car lst) (negatives (cdr lst)))
+          (negatives (cdr lst))
+                 )
 )
+  )
 
 (line "negatives")
 (mydisplay (negatives '()))  ; -> ()
