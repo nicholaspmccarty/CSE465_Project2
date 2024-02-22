@@ -67,8 +67,7 @@
 ; in the list and the second is the largest in the list. 
 ; lst -- contains numeric values, and length is >= 1.
 (define (minAndMax lst)
-	'()
-)
+  (list (apply min lst) (apply max lst)))
 
 (line "minAndMax")
 (mydisplay (minAndMax '(1 2 -3 4 2)))  ; -> (-3 4)
