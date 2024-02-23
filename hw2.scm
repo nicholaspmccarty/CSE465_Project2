@@ -4,6 +4,7 @@
 ; ---------------------------------------------
 
 ; Copyright ChatGPT - This was used in the process of this language.
+; Nicholas McCarty - CSE 465 - Meisam Amjad (Comparative Programming Languages)
 
 ; zipcodes.scm contains all the US zipcodes.
 ; This file must be in the same folder as hw2.scm file.
@@ -98,8 +99,16 @@
 ; ((1 a) (1 b) (1 c) (2 a) (2 b) (2 c))
 ; lst1 & lst2 -- two flat lists.
 (define (crossproduct lst1 lst2)
-	'()
-)
+  (if (null? lst1)
+      '()
+      (append (crossproduct-pair (car lst1) lst2)
+              (crossproduct (cdr lst1) lst2))))
+
+(define (crossproduct-pair item lst2)
+  (if (null? lst2)
+      '()
+      (cons (list item (car lst2))
+            (crossproduct-pair item (cdr lst2)))))
 
 (line "crossproduct")
 (mydisplay (crossproduct '(1 2) '(a b c)))
