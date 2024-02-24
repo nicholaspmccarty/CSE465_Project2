@@ -123,8 +123,16 @@
 ; from the 'zipcodes.scm' file for this. You can just call 'zipcodes' directly
 ; as shown in the sample example
 (define (getLatLon zipcode zips)
-	(list zipcode (car zips))
-)
+  (let loop ((zips zips))
+    (if (null? zips)
+        '() ; Return an empty list if the zipcode is not found
+        (let ((current (car zips)))
+          (if (= zipcode (car current)) ; Compare the zipcode with the first element of the current entry
+              (list (cadr (cdr (cdr (cdr current)))) ; Extract latitude
+                    (caddr (cdr (cdr (cdr current))))) ; Extract longitude
+              (loop (cdr zips))))))) ; Continue with the rest of the list if no match
+
+
 
 (line "getLatLon")
 (mydisplay (getLatLon 45056 zipcodes))
