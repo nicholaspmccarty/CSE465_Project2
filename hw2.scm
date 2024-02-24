@@ -143,9 +143,21 @@
 ; placeName -- is the text corresponding to the name of the place
 ; zips -- the zipcode DB
 (define (getCommonPlaces state1 state2 zips)
-	(list state1 state2)
-)
-
+  (define common-places '())
+  (let loop1 ((zips1 zips))
+    (if (null? zips1)
+        common-places
+        (let ((current1 (car zips1)))
+          (if (equal? state1 (caddr current1))
+              (let loop2 ((zips2 zips))
+                (cond ((null? zips2)
+                       (loop1 (cdr zips1)))
+                      ((and (equal? state2 (caddr (car zips2)))
+                            (equal? (cadr current1) (cadr (car zips2))))
+                       (set! common-places (cons (cadr current1) common-places))
+                       (loop1 (cdr zips1)))
+                      (else (loop2 (cdr zips2)))))
+              (loop1 (cdr zips1)))))))
 (line "getCommonPlaces")
 (mydisplay (getCommonPlaces "OH" "MI" zipcodes))
 (line "getCommonPlaces")
