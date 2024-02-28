@@ -180,8 +180,13 @@
 ; state -- state
 ; zips -- zipcode DB
 (define (zipCount state zips)
-	0
-)
+  (if (null? zips) ; If the list is empty, return the count as 0
+      0
+      (let ((currentEntry (car zips)) ; Extract the current entry from the list
+            (restEntries (cdr zips))) ; The rest of the entries
+        (if (string=? state (caddr currentEntry)) ; Compare the state with the third element of the entry
+            (+ 1 (zipCount state restEntries)) ; If it matches, increment the count and recurse on the rest
+            (zipCount state restEntries))))) ; Otherwise, just recurse on the rest without incrementing
 
 (line "zipCount")
 (mydisplay (zipCount "OH" zipcodes))
@@ -216,8 +221,20 @@
 ; filters -- list of predicates to apply to the individual elements
 
 (define (filterList lst filters)
-	lst
-)
+  (if (null? lst) ; If the list is empty, return an empty list
+      '()
+      (let ((item (car lst)) ; Take the first item of the list
+            (rest (cdr lst))) ; The rest of the list
+        (if (apply-all-filters item filters) ; Check if the item passes all filters
+            (cons item (filterList rest filters)) ; If yes, include it in the output
+            (filterList rest filters))))) ; Otherwise, skip it
+
+(define (apply-all-filters item filters)
+  (if (null? filters) ; If there are no more filters, the item passes
+      #t
+      (if ((car filters) item) ; Apply the current filter to the item
+          (apply-all-filters item (cdr filters)) ; If passed, check next filter
+          #f))) ; If any filter fails, return false
 
 (line "filterList")
 (mydisplay (filterList '(1 2 3 11 22 33 -1 -2 -3 -11 -22 -33) (list POS?)))
